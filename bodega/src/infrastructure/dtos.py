@@ -1,7 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from .database import Base
 
 class ProductEntity(Base):
     __tablename__ = 'products'
@@ -10,7 +8,6 @@ class ProductEntity(Base):
     name = Column(String, index=True)
     quantity = Column(Integer)
     price = Column(Integer)
-    warehouse_id = Column(Integer)
 
 class SupplierEntity(Base):
     __tablename__ = 'suppliers'

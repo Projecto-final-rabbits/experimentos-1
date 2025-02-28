@@ -1,36 +1,36 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from bodega.domain.models import BodegaModel
-from bodega.domain.repositories import BodegaRepository
+from .dtos import WarehouseEntity
+from src.domain.repositories import DomainRepository
 
 DATABASE_URL = "sqlite:///./bodega.db"
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-class BodegaRepositoryImpl(BodegaRepository):
+class WarehouseRepositoryImpl(DomainRepository):
     def __init__(self):
         self.db = SessionLocal()
 
-    def create(self, bodega: BodegaModel):
-        self.db.add(bodega)
+    def add(self, warehouse: WarehouseEntity):
+        self.db.add(warehouse)
         self.db.commit()
-        self.db.refresh(bodega)
-        return bodega
+        self.db.refresh(warehouse)
+        return warehouse
 
-    def get(self, bodega_id: int):
-        return self.db.query(BodegaModel).filter(BodegaModel.id == bodega_id).first()
+    def get_by_id(self, warehouse_id: int):
+        return self.db.query(WarehouseEntity).filter(WarehouseEntity.id == warehouse_id).first()
 
-    def list(self):
-        return self.db.query(BodegaModel).all()
+    def get_all(self):
+        return self.db.query(WarehouseEntity).all()
 
-    def update(self, bodega: BodegaModel):
-        self.db.merge(bodega)
+    def update(self, warehouse: WarehouseEntity):
+        self.db.merge(warehouse)
         self.db.commit()
-        return bodega
+        return warehouse
 
-    def delete(self, bodega_id: int):
-        bodega = self.get(bodega_id)
+    def delete(self, warehouse_id: int):
+        bodega = self.get(warehouse_id)
         if bodega:
             self.db.delete(bodega)
             self.db.commit()
