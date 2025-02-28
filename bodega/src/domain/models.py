@@ -1,19 +1,11 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
+from dataclasses import dataclass, field
+from src.shared.domain.entity import Entity
 
-Base = declarative_base()
-
-class Product(Base):
-    __tablename__ = 'products'
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    quantity = Column(Integer)
-    price = Column(Integer)
-
-class Supplier(Base):
-    __tablename__ = 'suppliers'
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    contact_info = Column(String)
+@dataclass
+class Product(Entity):
+    name = field()
+    quantity = field()
+    price = field()
+    warehouse_id = field()
+    warehouse_name = field()
+    warehouse_location = field()

@@ -1,18 +1,8 @@
-from typing import Protocol, List
-from .models import Bodega
+from src.shared.domain.repository import DomainRepository
 
-class BodegaRepository(Protocol):
-    def get_bodega(self, bodega_id: int) -> Bodega:
-        ...
 
-    def list_bodegas(self) -> List[Bodega]:
-        ...
+class WarehouseRepository(DomainRepository):
+    ...
 
-    def add_bodega(self, bodega: Bodega) -> None:
-        ...
-
-    def update_bodega(self, bodega: Bodega) -> None:
-        ...
-
-    def delete_bodega(self, bodega_id: int) -> None:
-        ...
+class ProductRepository(DomainRepository):
+    ...
