@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  ventas:
+    build: ./ventas
+    ports:
+      - "5000:5000"
+    container_name: ventas_service
+
+  compras:
+    build: ./compras
+    ports:
+      - "5001:5001"
+    container_name: compras_service
+
+  bodega:
+    build: ./bodega
+    ports:
+      - "5002:5002"
+    container_name: bodega_service
