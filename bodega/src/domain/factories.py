@@ -1,11 +1,15 @@
-
 from dataclasses import dataclass
+from typing import Generic, TypeVar  # Add these imports
 
 from src.shared.domain.factory import Factory
 from src.shared.domain.repository import DomainMapper
 
 from .models import Product, Warehouse, Supplier
 from .exceptions import DoesntExistObjectTypeOnDomain
+
+from src.service.mappers import ProductMapper
+
+T = TypeVar('T')  # Define a type variable
 
 @dataclass
 class _WarehouseFactory(Factory):
@@ -28,8 +32,8 @@ class _ProductFactory(Factory):
         return product
 
 @dataclass
-class _SupplierFactory(Factory):
-    def create_object(self, obj, mapper: DomainMapper = None):
+class _SupplierFactory(Factory, Generic[T]): 
+    def create_object(self, obj: T, mapper: DomainMapper = None) -> T:  
         if isinstance(obj, Supplier):
             return mapper.entity_to_dto(obj)
         
@@ -48,3 +52,5 @@ class WarehouseFactory(Factory):
             return _SupplierFactory().create_object(obj, mapper)
         raise DoesntExistObjectTypeOnDomain()
     
+
+
