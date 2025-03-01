@@ -1,9 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from sqlalchemy.orm import Session
+from dotenv import load_dotenv
+
 from .database import SessionLocal, engine, Base
 from .schemas import ProductSell
 from .service import sell_product_service
 from .pubsub import publish_message
+
+load_dotenv()
 
 app = FastAPI()
 

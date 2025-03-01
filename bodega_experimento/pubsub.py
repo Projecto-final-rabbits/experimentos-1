@@ -4,7 +4,7 @@ publisher = pubsub_v1.PublisherClient()
 subscriber = pubsub_v1.SubscriberClient()
 
 project_id = "your-gcp-project-id"
-topic_id = "your-topic-id"
+topic_id = "product_bought_sub"
 subscription_id = "your-subscription-id"
 
 def publish_message(event_type: str, data: dict):
