@@ -5,11 +5,15 @@ class ProductBase(BaseModel):
     name: str
     units: int
 
-class ProductCreate(ProductBase):
-    pass
+class ProductCreateDTO(ProductBase):
+    ...
+
+class ProductUpdateDTO(ProductBase):
+    id: int
 
 class ProductResponse(ProductBase):
     id: int
+    created_at: datetime
     updated_at: datetime
 
     class Config:
