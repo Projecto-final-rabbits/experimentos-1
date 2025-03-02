@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+import json
+
 from models import Product
 from schemas import ProductCreateDTO, ProductResponse, ProductUpdateDTO
 from pubsub import publish_message
@@ -31,8 +33,9 @@ def get_product_service(product_id: int, db: Session) -> ProductResponse:
 
 
 def handle_product_selled(event_data: dict, db: Session):
-    product_id = event_data["product_id"]
-    units = event_data["units"]
+    product = json.loads(event_data)
+    product_id = product["id"]
+    units = product["units"]
     update_product_units_service(product_id, -units, db)
 
 def _pusblish_event(event: EventType, db_product: Product):

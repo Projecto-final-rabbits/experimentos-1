@@ -3,16 +3,9 @@ from google.oauth2 import service_account
 import os
 import threading
 import json
-from datetime import datetime
 
 from enums import EventType
 
-class CustomJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        # Add other custom serialization logic here if needed
-        return super().default(obj)
 
 credentials = service_account.Credentials.from_service_account_file("cloud-key.json")
 publisher = pubsub_v1.PublisherClient(credentials=credentials)
@@ -27,9 +20,7 @@ def publish_message(event_type: EventType, data: dict):
     data_str = json.dumps({
         "id": data["id"],
         "name": data["name"],
-        "units": data["units"],
-        "created_at": data["created_at"].isoformat(),
-        "updated_at": data["updated_at"].isoformat()
+        "units": data["units"]
     })
     future = publisher.publish(topic_path, data_str.encode("utf-8"), event_type=event_type.value)
     future.result()
