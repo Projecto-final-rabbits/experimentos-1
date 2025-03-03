@@ -21,6 +21,16 @@ def sell_product(product: ProductSell, db: Session = Depends(get_db)):
     sold_product = sell_product_service(product, db)
     return sold_product
 
+@app.get("/products/{product_id}")
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    from service import get_product_service  
+    
+    product = get_product_service(product_id, db)
+    if not product:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    return product
+
+
 @app.on_event("startup")
 def startup_event():
     def callback(message):

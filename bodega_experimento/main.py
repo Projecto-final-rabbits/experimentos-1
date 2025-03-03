@@ -36,7 +36,6 @@ def startup_event():
         event_type = message.attributes.get("event_type")
         db = SessionLocal()
 
-        print("*** message received", event_data, event_type)
         if event_type == EventType.product_selled.value:
             handle_product_selled(event_data, db)
         

@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from .models import Product
-from .schemas import ProductCreate
-from .pubsub import publish_message
+from models import Product
+from schemas import ProductCreateDTO
+from pubsub import publish_message
 
-def create_product_service(product: ProductCreate, db: Session):
+def create_product_service(product: ProductCreateDTO, db: Session):
     db_product = Product(**product.dict())
     db.add(db_product)
     db.commit()
