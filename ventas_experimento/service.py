@@ -44,8 +44,8 @@ def handle_product_updated(event_data: str, db: Session):
         print("Error: No se pudo deserializar el evento en Ventas")
         return
     product_id = int(product_data["id"])
-    units = event_data["units"]
-    _update_product_units_service(product_id, -units, db)
+    units = int(product_data["units"])
+    _update_product_units_service(product_id, units, db)
 
 def handle_product_created(event_data: dict, db: Session):
     new_product = json.loads(event_data)
