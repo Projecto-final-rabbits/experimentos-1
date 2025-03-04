@@ -9,9 +9,11 @@ services:
     env_file:
       - ./ventas_experimento/.env
     volumes:
+      - ./ventas_experimento:/app
       - ./ventas_experimento/cloud-key.json:/app/cloud-key.json
     networks:
       - microservices_network
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
 
   bodega:
     build: ./bodega_experimento
@@ -21,9 +23,11 @@ services:
     env_file:
       - ./bodega_experimento/.env
     volumes:
+      - ./bodega_experimento:/app
       - ./bodega_experimento/cloud-key.json:/app/cloud-key.json
     networks:
       - microservices_network
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5002", "--reload"]
 
 networks:
   microservices_network:

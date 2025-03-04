@@ -47,3 +47,10 @@ def handle_product_selled(event_data: dict, db: Session):
 def _pusblish_event(event: EventType, db_product: Product):
     publish_message(event, db_product)
     return db_product
+
+def get_all_products_service(db: Session):
+    return db.query(Product).all()
+
+def delete_all_products_service(db: Session):
+    db.query(Product).delete()
+    db.commit()

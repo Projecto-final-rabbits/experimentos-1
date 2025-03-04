@@ -4,3 +4,4 @@ sqlalchemy
 pydantic
 google-cloud-pubsub
 python-dotenv
+faker
