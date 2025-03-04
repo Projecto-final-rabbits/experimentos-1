@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from database import SessionLocal, engine, Base, get_db
-from schemas import ProductSell
-from service import sell_product_service
+from schemas import ProductSell, ProductResponse
+from service import sell_product_service, get_product_service, get_all_products_service, delete_all_products_service
 from pubsub import publish_message
 from enums import EventType
 from pubsub import subscribe_to_product_created, subscribe_to_product_updated
@@ -22,8 +22,7 @@ def sell_product(product: ProductSell, db: Session = Depends(get_db)):
     return sold_product
 
 @app.get("/products/{product_id}")
-def get_product(product_id: int, db: Session = Depends(get_db)):
-    from service import get_product_service  
+def get_product(product_id: int, db: Session = Depends(get_db)): 
     
     product = get_product_service(product_id, db)
     if not product:
@@ -49,3 +48,12 @@ def startup_event():
 
     subscribe_to_product_created(callback)
     subscribe_to_product_updated(callback) 
+
+@app.get("/products/", response_model=list[ProductResponse])
+def read_all_products(db: Session = Depends(get_db)):
+    return get_all_products_service(db)
+
+@app.delete("/products/")
+def delete_all_products(db: Session = Depends(get_db)):
+    delete_all_products_service(db)
+    return {"message": "Todos los productos han sido eliminados"}

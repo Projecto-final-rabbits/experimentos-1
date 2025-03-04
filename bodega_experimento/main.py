@@ -1,12 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
+from faker import Faker
+import random
 
 load_dotenv()
 
 from database import SessionLocal, engine, Base, get_db
 from schemas import ProductCreateDTO, ProductUpdateDTO, ProductResponse
-from service import create_product_service, get_product_service, handle_product_selled, update_product_units_service
+from service import create_product_service, get_product_service, handle_product_selled, update_product_units_service, get_all_products_service, delete_all_products_service
 from pubsub import subscribe_to_topic  
 from enums import EventType
 
@@ -43,3 +45,28 @@ def startup_event():
         
 
     subscribe_to_topic(callback)  
+
+fake = Faker()
+@app.post("/populate_db/")
+def populate_db(quantity: int = Query(10, description="Cantidad de productos a crear"), db: Session = Depends(get_db)):
+    created_products = []
+
+    for _ in range(quantity):
+        product_data = ProductCreateDTO(
+            id=random.randint(100, 9999),
+            name=fake.word(),
+            description=fake.sentence(),
+            units=random.randint(300, 1000))
+        created_product = create_product_service(product_data, db)
+        created_products.append(created_product)
+
+    return {"message": f"{quantity} productos creados exitosamente", "products": created_products}
+
+@app.get("/products/", response_model=list[ProductResponse])
+def read_all_products(db: Session = Depends(get_db)):
+    return get_all_products_service(db)
+
+@app.delete("/products/")
+def delete_all_products(db: Session = Depends(get_db)):
+    delete_all_products_service(db)
+    return {"message": "Todos los productos han sido eliminados"}
